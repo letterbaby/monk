@@ -1,0 +1,7 @@
+{
+	"serverinfo": {
+		"id": "0_2_1"
+	},
+	"tcpconfig":{"serveraddress":":2111","maxconnnum":10000},
+	"bustask":true
+}

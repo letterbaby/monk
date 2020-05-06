@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option go_package = "ss_proto";
+
+enum Cmd
+{
+	NONE = 0;
+	SS_PING_PONG = 1;
+}
+
+message PingPong
+{
+	int32 gid = 1; // 携程id
+	int32 seq = 2;
+}

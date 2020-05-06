@@ -1,0 +1,9 @@
+{
+	"console":true,
+	"file":true,
+	"rotating":true,
+	"maxsize":200,
+	"dir":".//log",
+	"name":"pong2.log",
+	"level":0
+}
