@@ -65,7 +65,7 @@ func Test_Rpc(gid int) {
 
 		G______W.Done()
 
-		time.Sleep(time.Millisecond * 1)
+		//time.Sleep(time.Millisecond * 1)
 	}
 }
 
@@ -87,6 +87,6 @@ func Test_Rep(gid int) {
 
 		G_BusLogic.BusMgr.SendRouteMsg(G_PongSvrId, false, rmsg, false, 2, G_PongSvrId, false)
 
-		time.Sleep(time.Millisecond * 1)
+		//time.Sleep(time.Millisecond * 1)
 	}
 }
