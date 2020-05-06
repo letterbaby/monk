@@ -36,11 +36,13 @@ func InitNetConfig() {
 func exit(s os.Signal) {
 	logger.Info("Handle signal: %v", s)
 
+	// 服务器内部先关闭逻辑，这样会等待客户端先退出
+	logic.Close()
+
+	// 当这个服务对外的话，请放在logic.Close之前
 	if G_TcpServer != nil {
 		G_TcpServer.Close()
 	}
-
-	logic.Close()
 
 	logger.Close()
 

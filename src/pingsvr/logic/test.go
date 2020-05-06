@@ -30,7 +30,7 @@ func StartTest() {
 
 		G______W.Add(GO_COUNT * MSG_COUNT * 2)
 		for i := 0; i < GO_COUNT; i++ {
-			go Test_Rpc()
+			go Test_Rpc(i)
 			go Test_Rep(i)
 		}
 		G______W.Wait()
@@ -39,10 +39,11 @@ func StartTest() {
 	}()
 }
 
-func Test_Rpc() {
+func Test_Rpc(gid int) {
 	for i := 0; i < MSG_COUNT; i++ {
 		ping := &ss_proto.PingPong{}
 		ping.Seq = int32(i)
+		ping.Gid = int32(gid)
 
 		rmsg := &network.RawMessage{}
 		rmsg.MsgId = uint16(ss_proto.Cmd_SS_PING_PONG)
