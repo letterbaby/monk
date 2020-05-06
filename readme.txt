@@ -1,13 +1,15 @@
-1¡¢µ¥pong²âÊÔ
+1ã€å•pongæµ‹è¯•
 start.bat
 
-2¡¢¶àpong²âÊÔ
-¿ªÆôµÚÒ»¸öpong
+2ã€å¤špongæµ‹è¯•
+å¼€å¯ç¬¬ä¸€ä¸ªpong
 pongsvr.exe -cfg pong.json -log ponglog.json
 
-¿ªÆôµÚ¶þ¸öpong
+å¼€å¯ç¬¬äºŒä¸ªpong
 pongsvr.exe -cfg pong2.json -log pong2log.json
 
-¿ªÆôping
+å¼€å¯ping
 pingsvr.exe -cfg ping.json -log pinglog.json
 
+3ã€è®¨è®ºç¾¤
+QQ:336598527
