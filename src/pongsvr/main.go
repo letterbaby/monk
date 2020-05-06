@@ -50,6 +50,7 @@ func exit(s os.Signal) {
 }
 
 func main() {
+	os.Setenv("GOTRACEBACK", "crash")
 	//参数
 	logc := flag.String("log", "ponglog.json", "log config")
 	scfg := flag.String("cfg", "pong.json", "server config")

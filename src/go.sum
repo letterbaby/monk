@@ -6,8 +6,8 @@ github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d/go.mod h1:ma
 github.com/golang/protobuf v1.3.4 h1:87PNWwrRvUSnqS4dlcBU/ftvOIBep4sYuBLlh6rX2wk=
 github.com/golang/protobuf v1.3.4/go.mod h1:vzj43D7+SQXF/4pzW/hwtAqwc6iTitCiVSaWz5lYuqw=
 github.com/gomodule/redigo v2.0.0+incompatible/go.mod h1:B4C85qUVwatsJoIUNIfCRsp7qO0iAmpGFZ4EELWSbC4=
-github.com/letterbaby/manzo v0.0.0-20200430094224-c11c2995ce1a h1:5ymPxPrDYwFgJ7yy9EPss3pmcJdGd/GuzJ80YU+VU8s=
-github.com/letterbaby/manzo v0.0.0-20200430094224-c11c2995ce1a/go.mod h1:lbPq0klsp/dP2tgMPgPRkxT2VabHfa79qgScXH7O28U=
+github.com/letterbaby/manzo v0.0.0-20200506105636-e03e4732498f h1:Vz5s9txWll0JtBWmbr+dX35R1DM/Qz9bureggXa5+ao=
+github.com/letterbaby/manzo v0.0.0-20200506105636-e03e4732498f/go.mod h1:lbPq0klsp/dP2tgMPgPRkxT2VabHfa79qgScXH7O28U=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/russross/blackfriday/v2 v2.0.1/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/shurcooL/sanitized_anchor_name v1.0.0/go.mod h1:1NzhyTcUVG4SuEtjjoZeVRXNmyL/1OwPU0+IJeTBvfc=
