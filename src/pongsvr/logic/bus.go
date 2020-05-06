@@ -8,6 +8,7 @@ import (
 	"github.com/letterbaby/manzo/network"
 	"github.com/letterbaby/manzo/task"
 
+	"src/common"
 	. "src/pongsvr/config"
 	"src/ss_proto"
 )
@@ -69,11 +70,22 @@ func (self *PongBus) OnBusDisconnect() {
 	logger.Info("PongBus:OnDisconnect conn:%v,cid:%v", self.Conn, self.Id)
 
 	self.term.Close()
+
+	funcId := bus.GetServerFuncId(self.Id)
+
+	if common.FUNC_PING == funcId {
+		// 清理改ID下的数据
+	}
 }
 
 func (self *PongBus) OnBusData(msg *network.RawMessage) *network.RawMessage {
-	// 可以，
+
 	logger.Debug("PongBus:message conn:%v,msg:%v", self.Conn, msg)
+
+	funcId := bus.GetServerFuncId(self.Id)
+	if common.FUNC_PING == funcId {
+		// 可以分ID处理协议
+	}
 
 	if !G_Pongcfg.Bustask {
 		//可以直接处理
