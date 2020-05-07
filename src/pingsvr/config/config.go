@@ -18,6 +18,10 @@ type bussvr struct {
 type pingConfig struct {
 	Bussvrs    []*bussvr          `json:"bussvrs"`
 	ServerInfo *common.ServerInfo `json:"serverinfo"`
+
+	Pongcnt int `json:"pongcnt"`
+	Gocnt   int `json:"gocnt"`
+	Msgcnt  int `json:"msgcnt"`
 }
 
 var (

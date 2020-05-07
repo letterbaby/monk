@@ -8,4 +8,6 @@ const (
 type ServerInfo struct {
 	Id  string `json:"id"` //ID
 	IId int64
+
+	Pprof string `json:"pprof"`
 }

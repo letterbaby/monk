@@ -12,12 +12,8 @@ import (
 	"github.com/letterbaby/manzo/bus"
 	"github.com/letterbaby/manzo/logger"
 	"github.com/letterbaby/manzo/network"
-)
 
-const (
-	GO_COUNT   = 10
-	MSG_COUNT  = 1000
-	PONG_COUNT = 1
+	. "src/pingsvr/config"
 )
 
 var (
@@ -34,11 +30,11 @@ func StartTest() {
 		now := time.Now()
 		logger.Info("------------StartTest start-------------")
 
-		G______W.Add(GO_COUNT * MSG_COUNT * 3)
+		G______W.Add(G_Pingcfg.Gocnt * G_Pingcfg.Msgcnt * 3)
 
 		Test_DBTest(true)
 
-		for i := 0; i < GO_COUNT; i++ {
+		for i := 0; i < G_Pingcfg.Gocnt; i++ {
 			go Test_BusRpc(i)
 			go Test_BusRep(i)
 			go Test_DBRpc(i)
@@ -52,7 +48,7 @@ func StartTest() {
 }
 
 func Test_BusRpc(gid int) {
-	for i := 0; i < MSG_COUNT; i++ {
+	for i := 0; i < G_Pingcfg.Msgcnt; i++ {
 		ping := &ss_proto.PingPong{}
 		ping.Seq = int32(i)
 		ping.Gid = int64(gid)
@@ -63,7 +59,7 @@ func Test_BusRpc(gid int) {
 
 		logger.Debug("BusMgr.SendRouteMsg conn:%v,msg:%v", 1, rmsg)
 
-		rt := G_BusLogic.BusMgr.SendRouteMsg(G_PongSvrId, false, rmsg, true, 2, G_PongSvrId, false)
+		rt := G_BusLogic.BusMgr.SendRouteMsg(G_PongSvrId, false, rmsg, true, 20, G_PongSvrId, false)
 		if rt == nil {
 			logger.Fatal("Test id:%v,seq:%v", G_PongSvrId, i)
 			return
@@ -86,7 +82,7 @@ func Pong_BusRep() {
 }
 
 func Test_BusRep(gid int) {
-	for i := 0; i < MSG_COUNT; i++ {
+	for i := 0; i < G_Pingcfg.Msgcnt; i++ {
 		ping := &ss_proto.PingPong{}
 		ping.Seq = int32(i)
 		ping.Gid = int64(gid)
@@ -97,14 +93,14 @@ func Test_BusRep(gid int) {
 
 		logger.Debug("BusMgr.SendRouteMsg conn:%v,msg:%v", 1, rmsg)
 
-		G_BusLogic.BusMgr.SendRouteMsg(G_PongSvrId, false, rmsg, false, 2, G_PongSvrId, false)
+		G_BusLogic.BusMgr.SendRouteMsg(G_PongSvrId, false, rmsg, false, 20, G_PongSvrId, false)
 
 		//time.Sleep(time.Millisecond * 1)
 	}
 }
 
 func Test_DBRpc(gid int) {
-	for i := 0; i < MSG_COUNT; i++ {
+	for i := 0; i < G_Pingcfg.Msgcnt; i++ {
 		load := &ss_proto.RoleLoad{}
 		load.RoleId = int64(i)
 
@@ -115,9 +111,9 @@ func Test_DBRpc(gid int) {
 		logger.Debug("BusMgr.SendRouteMsg conn:%v,msg:%v", 1, rmsg)
 
 		/// ！！！！数据库测试时，开多个pong，同一个角色在同一个pong操作
-		lid := i%PONG_COUNT + 1
+		lid := i%G_Pingcfg.Pongcnt + 1
 		pongSvrId := bus.MakeServerId(0, common.FUNC_PONG, int64(lid))
-		rt := G_BusLogic.BusMgr.SendRouteMsg(pongSvrId, false, rmsg, true, 2, pongSvrId, false)
+		rt := G_BusLogic.BusMgr.SendRouteMsg(pongSvrId, false, rmsg, true, 20, pongSvrId, false)
 		if rt == nil {
 			logger.Fatal("Test id:%v,rid:%v", pongSvrId, i)
 			return
@@ -151,9 +147,9 @@ func Test_DBTest(start bool) {
 
 	logger.Debug("BusMgr.SendRouteMsg conn:%v,msg:%v", 1, rmsg)
 
-	lid := i%PONG_COUNT + 1
+	lid := i%G_Pingcfg.Pongcnt + 1
 	pongSvrId := bus.MakeServerId(0, common.FUNC_PONG, int64(lid))
-	rt := G_BusLogic.BusMgr.SendRouteMsg(pongSvrId, false, rmsg, true, 2, pongSvrId, false)
+	rt := G_BusLogic.BusMgr.SendRouteMsg(pongSvrId, false, rmsg, true, 20, pongSvrId, false)
 	if rt == nil {
 		logger.Fatal("Test id:%v,rid:%v", pongSvrId, i)
 		return
@@ -168,7 +164,7 @@ func Test_DBTest(start bool) {
 			G______R0 = base
 		} else {
 			// +1 是Test_DBTest的
-			if G______R0.GetLevel()+GO_COUNT+1 != base.GetLevel() {
+			if G______R0.GetLevel()+int32(G_Pingcfg.Gocnt)+1 != base.GetLevel() {
 				logger.Fatal("Cmd_SS_ROLE_LOAD rid:%v,obase:%v,nbase:%v", i, G______R0, base)
 			}
 			logger.Debug("Cmd_SS_ROLE_LOAD rid:%v,base:%v", i, base)

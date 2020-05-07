@@ -1,6 +1,7 @@
 {
 	"serverinfo": {
-		"id": "0_2_2"
+		"id": "0_2_2",
+		"pprof":":2212"
 	},
 	"bustask":false,
 	"tcpconfig":{"serveraddress":":2112","maxconnnum":10000},

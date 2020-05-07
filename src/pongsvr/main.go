@@ -7,6 +7,7 @@ import (
 	"src/pongsvr/logic"
 	"syscall"
 
+	"net/http"
 	_ "net/http/pprof"
 
 	. "src/pongsvr/config"
@@ -15,6 +16,7 @@ import (
 	"github.com/letterbaby/manzo/network"
 	"github.com/letterbaby/manzo/signal"
 	"github.com/letterbaby/manzo/sys/console"
+	"github.com/letterbaby/manzo/utils"
 
 	"src/ss_proto"
 )
@@ -52,6 +54,7 @@ func exit(s os.Signal) {
 
 func main() {
 	os.Setenv("GOTRACEBACK", "crash")
+
 	//参数
 	logc := flag.String("log", "ponglog.json", "log config")
 	scfg := flag.String("cfg", "pong.json", "server config")
@@ -61,6 +64,12 @@ func main() {
 
 	// 初始化本服务器配置
 	InitConfig(*scfg)
+
+	go func() {
+		defer utils.CatchPanic()
+		http.ListenAndServe(G_Pongcfg.ServerInfo.Pprof, nil)
+	}()
+
 	InitNetConfig()
 
 	logic.Main()
