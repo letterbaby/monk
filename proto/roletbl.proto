@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+
+package roletbl;
+
+message tbl {
+	optional int64 roleId = 1;
+	optional string roleName = 2;
+	optional int32 level = 3;
+}

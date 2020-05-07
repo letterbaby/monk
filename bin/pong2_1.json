@@ -2,6 +2,8 @@
 	"serverinfo": {
 		"id": "0_2_2"
 	},
+	"bustask":true,
 	"tcpconfig":{"serveraddress":":2112","maxconnnum":10000},
-	"bustask":true
+	"mysqlconfig":{"connstr":"192.168.93.137:3306","user":"root","passw":"123456","dbase":"pong","count":10},
+	"redisconfig":{"serveraddress":["192.168.93.137:7000","192.168.93.137:7001"],"password":""}
 }

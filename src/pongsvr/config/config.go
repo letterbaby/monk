@@ -6,15 +6,20 @@ import (
 
 	"github.com/letterbaby/manzo/bus"
 	"github.com/letterbaby/manzo/logger"
+	"github.com/letterbaby/manzo/mysql"
 	"github.com/letterbaby/manzo/network"
+	"github.com/letterbaby/manzo/redis"
 	"github.com/letterbaby/manzo/utils"
 )
 
 type pongConfig struct {
-	TcpConfig  *network.Config    `json:"tcpconfig"`
 	ServerInfo *common.ServerInfo `json:"serverinfo"`
 
-	Bustask bool `json:"bustask"`
+	Bustask   bool            `json:"bustask"`
+	TcpConfig *network.Config `json:"tcpconfig"`
+
+	RedisConfig *redis.Config `json:"redisconfig"`
+	MysqlConfig *mysql.Config `json:"mysqlconfig"`
 }
 
 var (

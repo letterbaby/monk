@@ -1,14 +1,17 @@
 package logic
 
 import (
+	"fmt"
 	"sync"
 
+	"github.com/gomodule/redigo/redis"
 	"github.com/letterbaby/manzo/bus"
 	"github.com/letterbaby/manzo/logger"
 	"github.com/letterbaby/manzo/network"
 	"github.com/letterbaby/manzo/task"
 
 	"src/common"
+	roletbl "src/common/roletble"
 	. "src/pongsvr/config"
 	"src/ss_proto"
 )
@@ -93,23 +96,27 @@ func (self *PongBus) OnBusData(msg *network.RawMessage) *network.RawMessage {
 		case uint16(ss_proto.Cmd_SS_PING_PONG):
 			//pong := msg.MsgData.(*ss_proto.PingPong)
 			self.SendRouteMsg(msg)
-			return nil
+		case uint16(ss_proto.Cmd_SS_ROLE_LOAD):
+			self.Hand_RoleLoad(msg)
 		default:
 			logger.Warning("PongBus:OnBusData conn:%v,msg:%v", 1, msg)
 		}
 
 	} else {
-		tid := int32(0)
+		tid := int64(0)
 
 		switch msg.MsgId {
 		case uint16(ss_proto.Cmd_SS_PING_PONG):
 			ping := msg.MsgData.(*ss_proto.PingPong)
 			tid = ping.Gid
+		case uint16(ss_proto.Cmd_SS_ROLE_LOAD):
+			load := msg.MsgData.(*ss_proto.RoleLoad)
+			tid = load.RoleId
 		}
 
 		//task异步处理
 		t := taskPool.Get().(*PongBusTask)
-		t.Id = int64(tid)
+		t.Id = tid
 		t.Bus = self
 		t.Msg = msg
 		self.term.AddTask(t)
@@ -127,6 +134,8 @@ func (self *PongBus) Hand_Task(t *PongBusTask) {
 	case uint16(ss_proto.Cmd_SS_PING_PONG):
 		//pong := msg.MsgData.(*ss_proto.PingPong)
 		self.SendRouteMsg(msg)
+	case uint16(ss_proto.Cmd_SS_ROLE_LOAD):
+		self.Hand_RoleLoad(msg)
 	default:
 		logger.Warning("PongBus:Hand_Task conn:%v,msg:%v", 1, msg)
 	}
@@ -135,6 +144,55 @@ func (self *PongBus) Hand_Task(t *PongBusTask) {
 	t.Bus = nil
 
 	taskPool.Put(t)
+}
+
+func (self *PongBus) Hand_RoleLoad(msg *network.RawMessage) {
+	logger.Info("PongBus:Hand_RoleLoad conn:%v,msg:%v", self.Conn, msg)
+
+	req := msg.MsgData.(*ss_proto.RoleLoad)
+
+	rid := fmt.Sprintf("%d", req.RoleId)
+
+	// cache 不允许从
+	ret, err := G_Redis.Get(false, "cache", "base_"+rid)
+	if err != nil {
+		if err != redis.ErrNil {
+			logger.Error("PongBus:Hand_RoleLoad rid:%v,i:%v", req.RoleId, err)
+		}
+	}
+
+	var roledata *roletbl.RoleData
+
+	if ret != nil && err != nil {
+		roledata = roletbl.CreateData(req.RoleId, "role", G_MysqlMgr)
+		roledata.SetData(ret.([]byte))
+	} else {
+		roledata = roletbl.LoadData(req.RoleId, "role", true, G_MysqlMgr)
+	}
+
+	// 模拟修改
+	if roledata != nil {
+		lvl := roledata.GetLevel()
+		roledata.SetLevel(lvl + 1)
+
+		name := roledata.GetRoleName()
+		if len(name) == 0 {
+			roledata.SetRoleName(fmt.Sprintf("rr%d", req.RoleId))
+		}
+
+		// 生成2进制
+		req.Base = roledata.GetData()
+
+		err = G_Redis.SetEx("cache", "base_"+rid, 30*60, req.Base)
+		if err != nil {
+			logger.Error("PongBus:Hand_RoleLoad rid:%v,i:%v", req.RoleId, err)
+		}
+
+		// 在线存一般都是异步，下线保存一般都是同步
+		roledata.Save(false, false)
+	}
+
+	self.SendRouteMsg(msg)
 }
 
 //----------------------------------------------------------------------

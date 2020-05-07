@@ -6,10 +6,17 @@ enum Cmd
 {
 	NONE = 0;
 	SS_PING_PONG = 1;
+	SS_ROLE_LOAD = 2;
 }
 
 message PingPong
 {
-	int32 gid = 1; // 携程id
+	int64 gid = 1; // 携程id
 	int32 seq = 2;
+}
+
+message RoleLoad
+{
+	int64 roleId=1;
+	bytes base=2; //基础数据
 }

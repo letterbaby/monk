@@ -29,6 +29,7 @@ func (self *BusLogic) Init() {
 
 	cfg.Parser = network.NewProtocParser(-1)
 	cfg.Parser.Register(uint16(ss_proto.Cmd_SS_PING_PONG), ss_proto.PingPong{})
+	cfg.Parser.Register(uint16(ss_proto.Cmd_SS_ROLE_LOAD), ss_proto.RoleLoad{})
 
 	for _, v := range G_Pingcfg.Bussvrs {
 		binfo := &bus.NewSvrInfo{}
@@ -70,7 +71,7 @@ func (self *BusLogic) OnBusData(msg *network.RawMessage) *network.RawMessage {
 	case uint16(ss_proto.Cmd_SS_PING_PONG):
 		// 多个Pong不是同步的
 		///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		Pong_Rep()
+		Pong_BusRep()
 	default:
 		logger.Warning("BusLogic:OnBusData conn:%v,msg:%v", 1, msg)
 	}
