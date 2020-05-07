@@ -9,6 +9,8 @@ github.com/gomodule/redigo v2.0.0+incompatible h1:K/R+8tc58AaqLkqG2Ol3Qk+DR/TlNu
 github.com/gomodule/redigo v2.0.0+incompatible/go.mod h1:B4C85qUVwatsJoIUNIfCRsp7qO0iAmpGFZ4EELWSbC4=
 github.com/letterbaby/manzo v0.0.0-20200507065722-db8a33ca2d38 h1:e6HGX35xOUYaA6VfWtyll7SKfONjFL4ATPmrs1/88f8=
 github.com/letterbaby/manzo v0.0.0-20200507065722-db8a33ca2d38/go.mod h1:lbPq0klsp/dP2tgMPgPRkxT2VabHfa79qgScXH7O28U=
+github.com/letterbaby/manzo v0.0.0-20200507130959-ac34577344de h1:eU9kjG+DS8T0d5+5RUmO5Y5iSPwal9qp4WI7Y1Ta+L0=
+github.com/letterbaby/manzo v0.0.0-20200507130959-ac34577344de/go.mod h1:lbPq0klsp/dP2tgMPgPRkxT2VabHfa79qgScXH7O28U=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/russross/blackfriday/v2 v2.0.1/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/shurcooL/sanitized_anchor_name v1.0.0/go.mod h1:1NzhyTcUVG4SuEtjjoZeVRXNmyL/1OwPU0+IJeTBvfc=
