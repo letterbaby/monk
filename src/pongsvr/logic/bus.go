@@ -154,20 +154,20 @@ func (self *PongBus) Hand_RoleLoad(msg *network.RawMessage) {
 	rid := fmt.Sprintf("%d", req.RoleId)
 
 	// cache 不允许从
+
+	var roledata *roletbl.RoleData
 	ret, err := G_Redis.Get(false, "pong", "base_"+rid)
 	if err != nil {
 		if err != redis.ErrNil {
 			logger.Error("PongBus:Hand_RoleLoad rid:%v,i:%v", req.RoleId, err)
 		}
-	}
-
-	var roledata *roletbl.RoleData
-
-	if ret != nil && err != nil {
+	} else if ret != nil {
 		//TODO：通过固定更新频率来判断，缓存是否失效
 		roledata = roletbl.CreateData(req.RoleId, "role", G_MysqlMgr)
 		roledata.SetData(ret.([]byte))
-	} else {
+	}
+
+	if roledata == nil {
 		roledata = roletbl.LoadData(req.RoleId, "role", true, G_MysqlMgr)
 	}
 
