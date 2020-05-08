@@ -171,8 +171,11 @@ func (self *PongBus) Hand_RoleLoad(msg *network.RawMessage) {
 		roledata = roletbl.LoadData(req.RoleId, "role", true, G_MysqlMgr)
 	}
 
-	// 模拟修改
 	if roledata != nil {
+		//也可以通过req.Base修改
+		//roledata.SetData(req.Base)
+
+		// 模拟修改
 		lvl := roledata.GetLevel()
 		roledata.SetLevel(lvl + 1)
 
