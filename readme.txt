@@ -14,8 +14,8 @@ pingsvr.exe -cfg ping.json -log pinglog.json
 3、DB测试
 pong.cfg修改对应的mysql、redis配置
 
-4、历史构建的服务器逻辑架构图
-![image](http://chuantu.xyz/t6/732/1588999856x1031866013.png)
+4、某个游戏构建的服务器逻辑架构图
+eg:![某个游戏构建的服务器逻辑架构图](http://chuantu.xyz/t6/732/1588999856x1031866013.png)
 
 5、讨论群
 QQ:336598527
