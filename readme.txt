@@ -15,7 +15,7 @@ pingsvr.exe -cfg ping.json -log pinglog.json
 pong.cfg修改对应的mysql、redis配置
 
 4、某个游戏构建的服务器逻辑架构图
-eg:![某个游戏构建的服务器逻辑架构图](http://chuantu.xyz/t6/732/1588999856x1031866013.png)
+eg:![某个游戏构建的服务器逻辑架构图](https://github.com/letterbaby/monk/blob/master/pic/frame.png)
 
 5、讨论群
 QQ:336598527
