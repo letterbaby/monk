@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/golang/protobuf/proto"
 	"github.com/gomodule/redigo/redis"
 	"github.com/letterbaby/manzo/bus"
 	"github.com/letterbaby/manzo/logger"
@@ -94,7 +95,6 @@ func (self *PongBus) OnBusData(msg *network.RawMessage) *network.RawMessage {
 		//可以直接处理
 		switch msg.MsgId {
 		case uint16(ss_proto.Cmd_SS_PING_PONG):
-			//pong := msg.MsgData.(*ss_proto.PingPong)
 			self.SendRouteMsg(msg)
 		case uint16(ss_proto.Cmd_SS_ROLE_LOAD):
 			self.Hand_RoleLoad(msg)
@@ -107,7 +107,11 @@ func (self *PongBus) OnBusData(msg *network.RawMessage) *network.RawMessage {
 
 		switch msg.MsgId {
 		case uint16(ss_proto.Cmd_SS_PING_PONG):
-			ping := msg.MsgData.(*ss_proto.PingPong)
+			ping := &ss_proto.PingPong{}
+			err := proto.Unmarshal(msg.MsgData.([]byte), ping)
+			if err != nil {
+				logger.Fatal("PongBus:OnBusData conn:%v,msg:%v", 1, msg)
+			}
 			tid = ping.Gid
 		case uint16(ss_proto.Cmd_SS_ROLE_LOAD):
 			load := msg.MsgData.(*ss_proto.RoleLoad)
@@ -132,7 +136,6 @@ func (self *PongBus) Hand_Task(t *PongBusTask) {
 
 	switch msg.MsgId {
 	case uint16(ss_proto.Cmd_SS_PING_PONG):
-		//pong := msg.MsgData.(*ss_proto.PingPong)
 		self.SendRouteMsg(msg)
 	case uint16(ss_proto.Cmd_SS_ROLE_LOAD):
 		self.Hand_RoleLoad(msg)

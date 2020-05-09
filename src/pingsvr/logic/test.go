@@ -65,7 +65,12 @@ func Test_BusRpc(gid int) {
 			return
 		}
 
-		pong := rt.MsgData.(*ss_proto.PingPong)
+		pong := &ss_proto.PingPong{}
+		err := proto.Unmarshal(rt.MsgData.([]byte), pong)
+		if err != nil {
+			logger.Fatal("Test id:%v,seq:%v,i:%v", G_PongSvrId, i, err)
+		}
+
 		if pong.Seq != ping.Seq {
 			logger.Fatal("Test id:%v,ping:%v,pong:%v", ping, pong)
 			return

@@ -5,6 +5,7 @@ import (
 	"src/ss_proto"
 	"sync/atomic"
 
+	"github.com/golang/protobuf/proto"
 	"github.com/letterbaby/manzo/bus"
 	"github.com/letterbaby/manzo/logger"
 	"github.com/letterbaby/manzo/network"
@@ -28,7 +29,10 @@ func (self *BusLogic) Init() {
 	cfg.SvrInfo.Id = G_Pingcfg.ServerInfo.IId
 
 	cfg.Parser = network.NewProtocParser(-1)
-	cfg.Parser.Register(uint16(ss_proto.Cmd_SS_PING_PONG), ss_proto.PingPong{})
+
+	// 演示在上成反序列话
+	//cfg.Parser.Register(uint16(ss_proto.Cmd_SS_PING_PONG), ss_proto.PingPong{})
+	// 演示在底层反序列话
 	cfg.Parser.Register(uint16(ss_proto.Cmd_SS_ROLE_LOAD), ss_proto.RoleLoad{})
 
 	for _, v := range G_Pingcfg.Bussvrs {
@@ -69,6 +73,13 @@ func (self *BusLogic) OnBusData(msg *network.RawMessage) *network.RawMessage {
 	logger.Debug("BusLogic:OnBusData conn:%v,msg:%v", 1, msg)
 	switch msg.MsgId {
 	case uint16(ss_proto.Cmd_SS_PING_PONG):
+
+		pong := &ss_proto.PingPong{}
+		err := proto.Unmarshal(msg.MsgData.([]byte), pong)
+		if err != nil {
+			logger.Fatal("BusLogic:OnBusData msg:%v,i:%v", msg, err)
+		}
+
 		// 多个Pong不是同步的
 		///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		Pong_BusRep()

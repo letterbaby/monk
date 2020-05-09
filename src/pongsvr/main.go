@@ -29,7 +29,10 @@ func InitNetConfig() {
 
 	// 其他没通过配置的需要初始化
 	parser := network.NewProtocParser(-1)
-	parser.Register(uint16(ss_proto.Cmd_SS_PING_PONG), ss_proto.PingPong{})
+
+	// 可以上底层反序列话
+	//parser.Register(uint16(ss_proto.Cmd_SS_PING_PONG), ss_proto.PingPong{})
+	// 可以在底层反序列话
 	parser.Register(uint16(ss_proto.Cmd_SS_ROLE_LOAD), ss_proto.RoleLoad{})
 
 	G_Pongcfg.TcpConfig.Parser = parser
