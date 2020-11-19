@@ -30,21 +30,28 @@ func StartTest() {
 		now := time.Now()
 		logger.Info("------------StartTest start-------------")
 
-		G______W.Add(G_Pingcfg.Gocnt * G_Pingcfg.Msgcnt * 3)
+		count := G_Pingcfg.Gocnt * G_Pingcfg.Msgcnt * 1
+		G______W.Add(count)
 
-		Test_DBTest(true)
+		//Test_DBTest(true)
 
 		for i := 0; i < G_Pingcfg.Gocnt; i++ {
 			go Test_BusRpc(i)
-			go Test_BusRep(i)
-			go Test_DBRpc(i)
+			//go Test_BusRep(i)
+			//go Test_DBRpc(i)
 		}
 		G______W.Wait()
 
-		Test_DBTest(false)
+		//Test_DBTest(false)
 
-		logger.Info("------------StartTest done-------------:%v", time.Now().Sub(now))
+		logger.Info("------------StartTest done-------------")
+		t := time.Now().Sub(now)
+		logger.Info("----CONN:%v,MSG:%v,TIME:%v,QPS:%v------",
+			G_Pingcfg.Gocnt, count, t, int64(count)/int64(t.Seconds()))
+		logger.Info("---------------------------------------")
+
 	}()
+
 }
 
 func Test_BusRpc(gid int) {

@@ -5,5 +5,5 @@
 	"maxsize":200,
 	"dir":".//log",
 	"name":"pong2.log",
-	"level":0
+	"level":1
 }

@@ -5,5 +5,5 @@
 	"maxsize":200,
 	"dir":".//log",
 	"name":"ping.log",
-	"level":0
+	"level":2
 }

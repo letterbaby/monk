@@ -2,13 +2,14 @@ package logic
 
 import (
 	"fmt"
+
 	"sync"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/gomodule/redigo/redis"
 	"github.com/letterbaby/manzo/bus"
 	"github.com/letterbaby/manzo/logger"
 	"github.com/letterbaby/manzo/network"
+	"github.com/letterbaby/manzo/rand"
 	"github.com/letterbaby/manzo/task"
 
 	"src/common"
@@ -103,24 +104,25 @@ func (self *PongBus) OnBusData(msg *network.RawMessage) *network.RawMessage {
 		}
 
 	} else {
-		tid := int64(0)
+		tid := rand.RandInt(0, 100)
 
-		switch msg.MsgId {
-		case uint16(ss_proto.Cmd_SS_PING_PONG):
-			ping := &ss_proto.PingPong{}
-			err := proto.Unmarshal(msg.MsgData.([]byte), ping)
-			if err != nil {
-				logger.Fatal("PongBus:OnBusData conn:%v,msg:%v", 1, msg)
+		/*
+			switch msg.MsgId {
+			case uint16(ss_proto.Cmd_SS_PING_PONG):
+				ping := &ss_proto.PingPong{}
+				err := proto.Unmarshal(msg.MsgData.([]byte), ping)
+				if err != nil {
+					logger.Fatal("PongBus:OnBusData conn:%v,msg:%v", 1, msg)
+				}
+				tid = ping.Gid
+			case uint16(ss_proto.Cmd_SS_ROLE_LOAD):
+				load := msg.MsgData.(*ss_proto.RoleLoad)
+				tid = load.RoleId
 			}
-			tid = ping.Gid
-		case uint16(ss_proto.Cmd_SS_ROLE_LOAD):
-			load := msg.MsgData.(*ss_proto.RoleLoad)
-			tid = load.RoleId
-		}
-
+		*/
 		//task异步处理
 		t := taskPool.Get().(*PongBusTask)
-		t.Id = tid
+		t.Id = int64(tid)
 		t.Bus = self
 		t.Msg = msg
 		self.term.AddTask(t)
@@ -132,7 +134,7 @@ func (self *PongBus) OnBusData(msg *network.RawMessage) *network.RawMessage {
 func (self *PongBus) Hand_Task(t *PongBusTask) {
 	msg := t.Msg
 
-	logger.Info("PongBus:Hand_Task conn:%v,t:%v,msg:%v", self.Conn, t, msg)
+	logger.Debug("PongBus:Hand_Task conn:%v,t:%v,msg:%v", self.Conn, t, msg)
 
 	switch msg.MsgId {
 	case uint16(ss_proto.Cmd_SS_PING_PONG):
